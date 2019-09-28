@@ -12,9 +12,9 @@ class ImguiSfmlConan(ConanFile):
     homepage = 'https://github.com/eliasdaler/imgui-sfml'
     author = "Bincrafters <bincrafters@gmail.com>"
     license = "MIT"
-    exports = ["LICENSE"]
-    exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
+    exports_sources = ['CMakeLists.txt']
+    exports = ['LICENSE.md']
 
     settings = 'os', 'compiler', 'build_type', 'arch'
     options = {
@@ -37,6 +37,7 @@ class ImguiSfmlConan(ConanFile):
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
     _imgui_subfolder = os.path.join(_source_subfolder, "imgui")
+    _imconfig_path = ""
 
     requires = (
         'sfml/2.5.1@bincrafters/stable'
@@ -45,8 +46,6 @@ class ImguiSfmlConan(ConanFile):
     def config_options(self):
         if self.settings.os == 'Windows':
             del self.options.fPIC
-
-    def configure(self):
         imconfig = self.options.imconfig
         if imconfig:
             if not os.path.isfile(str(imconfig)):
@@ -55,6 +54,9 @@ class ImguiSfmlConan(ConanFile):
                 self._imconfig_path = os.path.abspath(str(self.options.imconfig))
         if not self.options.imgui_version:
             raise ConanInvalidConfiguration("ImGui version is empty")
+
+    def configure(self):
+        self.options['sfml'].shared = self.options.shared
 
     def source(self):
         source_url = "https://github.com/eliasdaler/imgui-sfml"
