@@ -59,13 +59,11 @@ class ImguiSfmlConan(ConanFile):
         self.options['sfml'].shared = self.options.shared
 
     def source(self):
-        source_url = "https://github.com/eliasdaler/imgui-sfml"
-        tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version), sha256="16a589cb7219ebe3147b13cfe44e50de315deedf6ca8bd67d4ef91de3a09478e")
+        tools.get(**self.conan_data["sources"][self.version])
         extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, self._source_subfolder)
 
-        source_url = "https://github.com/ocornut/imgui"
-        tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.options.imgui_version), sha256="d3fa6071b28b260b513e36aeb4d002b3ad3430f4bf511ded20d11c7b20d41e5b")
+        tools.get(**self.conan_data["sources"]["imgui-{}".format(self.options.imgui_version)])
         extracted_dir = "imgui-{}".format(self.options.imgui_version)
         os.rename(extracted_dir, self._imgui_subfolder)
 
