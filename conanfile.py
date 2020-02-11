@@ -29,7 +29,7 @@ class ImguiSfmlConan(ConanFile):
         'fPIC': True,
         'imconfig': None,
         'imconfig_install_folder': None,
-        'imgui_version': '1.72',
+        'imgui_version': '1.75',
         'sfml:window': True,
         'sfml:graphics': True
     }
