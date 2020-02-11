@@ -13,7 +13,7 @@ class ImguiSfmlConan(ConanFile):
     author = "Bincrafters <bincrafters@gmail.com>"
     license = "MIT"
     generators = "cmake"
-    exports_sources = ['CMakeLists.txt']
+    exports_sources = ['CMakeLists.txt', '0001-conan-libs.patch']
     exports = ['LICENSE.md']
 
     settings = 'os', 'compiler', 'build_type', 'arch'
@@ -74,7 +74,7 @@ class ImguiSfmlConan(ConanFile):
         cmake.definitions['IMGUI_DIR'] = os.path.join(self.source_folder, self._imgui_subfolder)
         cmake.definitions['SFML_DIR'] = os.path.join(self.deps_cpp_info['sfml'].lib_paths[0], 'cmake', 'SFML')
         cmake.definitions['IMGUI_SFML_BUILD_EXAMPLES'] = 'OFF'
-        cmake.definitions['IMGUI_SFML_FIND_SFML'] = 'ON'
+        cmake.definitions['IMGUI_SFML_FIND_SFML'] = 'OFF'
         if self.options.imconfig_install_folder:
             cmake.definitions['IMGUI_SFML_CONFIG_INSTALL_DIR'] = self.options.imconfig_install_folder
         if self.options.imconfig:
@@ -88,6 +88,7 @@ class ImguiSfmlConan(ConanFile):
         return cmake
 
     def build(self):
+        tools.patch(self._source_subfolder, patch_file="0001-conan-libs.patch")
         cmake = self._configure_cmake()
         cmake.build()
 
