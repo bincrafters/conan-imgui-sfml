@@ -10,7 +10,6 @@ class ImguiSfmlConan(ConanFile):
     topics = ('conan', 'sfml', 'gui', 'imgui')
     url = "https://github.com/bincrafters/conan-imgui-sfml"
     homepage = 'https://github.com/eliasdaler/imgui-sfml'
-    author = "Bincrafters <bincrafters@gmail.com>"
     license = "MIT"
     generators = "cmake"
     exports_sources = ['CMakeLists.txt', '0001-conan-libs.patch']
