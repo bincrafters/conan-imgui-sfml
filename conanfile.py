@@ -64,13 +64,6 @@ class ImguiSfmlConan(ConanFile):
     def _configure_cmake(self):
         cmake = CMake(self)
         cmake.definitions["IMGUI_DIR"] = os.path.join(self.source_folder, self._imgui_subfolder)
-
-        # FIXME: Shipping the default config/find CMake files is against (newer) Conan conventions
-        # Packages should be independent of specific build systems for customers
-        # This SFML/cmake path is becoming eventually invalid
-        # Try to migrate to one of the Conan CMake generators like cmake_find_package_multi
-        cmake.definitions["SFML_DIR"] = os.path.join(self.deps_cpp_info["sfml"].lib_paths[0], "cmake", "SFML")
-
         cmake.definitions["IMGUI_SFML_BUILD_EXAMPLES"] = "OFF"
         cmake.definitions["IMGUI_SFML_FIND_SFML"] = "OFF"
         if self.options.imconfig_install_folder:
