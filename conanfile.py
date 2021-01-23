@@ -20,6 +20,7 @@ class ImguiSfmlConan(ConanFile):
         "fPIC": [True, False],
         "imconfig": "ANY",
         "imconfig_install_folder": "ANY",
+        "imgui_version": ["1.75",],
     }
     default_options = {
         "shared": False,
@@ -27,7 +28,8 @@ class ImguiSfmlConan(ConanFile):
         "imconfig": None,
         "imconfig_install_folder": None,
         "sfml:window": True,
-        "sfml:graphics": True
+        "sfml:graphics": True,
+        "imgui_version": "1.75",
     }
 
     _source_subfolder = "source_subfolder"
@@ -53,11 +55,11 @@ class ImguiSfmlConan(ConanFile):
         self.options["sfml"].shared = self.options.shared
 
     def source(self):
-        tools.get(**self.conan_data["sources"][self.version][0])
+        tools.get(**self.conan_data["sources"][self.version]["url"]["sfml-{}".format(self.options.imgui_version)][0])
         extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, self._source_subfolder)
 
-        tools.get(**self.conan_data["sources"][self.version][1])
+        tools.get(**self.conan_data["sources"][self.version]["url"]["sfml-{}".format(self.options.imgui_version)][1])
         extracted_dir = glob.glob("imgui-*")[0]
         os.rename(extracted_dir, self._imgui_subfolder)
 
@@ -79,9 +81,8 @@ class ImguiSfmlConan(ConanFile):
         return cmake
 
     def build(self):
-        if "patches" in self.conan_data and self.version in self.conan_data["patches"]:
-            for patch in self.conan_data["patches"][self.version]:
-                tools.patch(**patch)
+        for patch in self.conan_data.get("patches", {}).get(self.version, []):
+            tools.patch(**patch)
 
         cmake = self._configure_cmake()
         cmake.build()
